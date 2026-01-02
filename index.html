@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es-AR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Catálogo Online | Pedido por WhatsApp</title>
+
+  <link rel="stylesheet" href="styles.css" />
+
+  <meta property="og:image" content="https://iili.io/fjnJyAl.md.png" />
+</head>
+
+<body>
+
+<header class="topbar">
+  <div class="wrap topbar-inner">
+    <div class="brand">
+      <strong id="brandName">Tu Emprendimiento</strong>
+    </div>
+
+    <div class="pill" id="btnOpenCart">
+      Carrito <span class="count" id="cartCount">0</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+<section class="hero">
+  <img class="logo-hero" src="https://iili.io/fjnJyAl.md.png" alt="Logo">
+  <h1>Elegí productos y pedí por WhatsApp</h1>
+</section>
+
+<section class="section" id="catalogo">
+  <div class="controls">
+    <div class="search">
+      <input id="qSearch" placeholder="Buscar productos…" />
+      <div class="x" id="btnClear">✕</div>
+    </div>
+    <div class="filters" id="filters"></div>
+  </div>
+
+  <div id="grid" class="grid"></div>
+  <div id="empty" class="empty" style="display:none;">No hay productos</div>
+</section>
+
+</main>
+
+<div class="sticky">
+  <button id="btnStickyCatalog">Catálogo</button>
+  <button id="btnStickyCart">Enviar pedido</button>
+</div>
+
+<div class="overlay" id="overlay"></div>
+
+<aside class="drawer" id="drawer">
+  <div class="drawer-head">
+    <strong>Tu pedido</strong>
+    <button id="btnCloseCart">✕</button>
+  </div>
+
+  <div id="cartList"></div>
+
+  <div class="drawer-foot">
+    <div>Items: <b id="sumItems">0</b></div>
+    <div>Total: <b id="sumTotal">$0</b></div>
+    <button id="btnSendWA">Enviar por WhatsApp</button>
+    <button id="btnClearCart">Vaciar carrito</button>
+  </div>
+</aside>
+
+<footer>
+  <a href="https://ciborg347.onrender.com" target="_blank">
+    Creado y diseñado por Ciborg 347
+  </a>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
