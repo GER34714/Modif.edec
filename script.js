@@ -34,7 +34,7 @@ async function init(){
 function setBrand(){
   $("brandName").textContent = STORE_NAME;
   $("footName").textContent = STORE_NAME;
-  document.title = `${STORE_NAME} | Catálogo Online`;
+  document.title = `${STORE_NAME} | Catálogo Boutique`;
 }
 
 function wireEvents(){
@@ -52,9 +52,7 @@ function wireEvents(){
     if(!confirm("¿Vaciar carrito?")) return;
     cart = {};
     saveCart();
-    updateCounters();
     renderAll();
-    renderCart();
     updateQuickWA();
   });
 
@@ -130,6 +128,14 @@ function slug(s){
   return (s || "").toString().toLowerCase().trim();
 }
 
+function safeId(s){
+  return slug(s).replace(/[^a-z0-9]+/g,"_").replace(/^_+|_+$/g,"");
+}
+
+function uniq(arr){
+  return Array.from(new Set(arr.filter(Boolean)));
+}
+
 function buildIndexes(){
   const cats = ["Todos", ...uniq(all.map(x=>x.categoria)).sort((a,b)=>a.localeCompare(b,"es"))];
 
@@ -199,14 +205,6 @@ function buildCatNav(cats){
   });
 }
 
-function safeId(s){
-  return slug(s).replace(/[^a-z0-9]+/g,"_").replace(/^_+|_+$/g,"");
-}
-
-function uniq(arr){
-  return Array.from(new Set(arr.filter(Boolean)));
-}
-
 function applyFilters(){
   const query = slug(q);
 
@@ -217,19 +215,15 @@ function applyFilters(){
     if(!okCat || !okSub) return false;
     if(!query) return true;
 
-    const hay = slug(
-      `${p.nombre} ${p.id} ${p.categoria} ${p.subcategoria} ${p.descripcion} ${p.tags.join(" ")}`
-    );
+    const hay = slug(`${p.nombre} ${p.id} ${p.categoria} ${p.subcategoria} ${p.descripcion} ${p.tags.join(" ")}`);
     return hay.includes(query);
   });
 
   view = sortProducts(view, sortBy);
 
-  const info = $("resultsInfo");
-  info.textContent = `${view.length} producto(s) · ${activeCat} · ${activeSub}` + (q ? ` · búsqueda: "${q}"` : "");
-}
-
-function sortProducts(list, mode){
+  $("resultsInfo").textContent =
+    `${view.length} producto(s) · ${activeCat} · ${activeSub}` + (q ? ` · búsqueda: "${q}"` : "");
+}function sortProducts(list, mode){
   const arr = [...list];
 
   if(mode === "az"){
@@ -271,6 +265,7 @@ function renderAll(){
   renderCatalogGroups();
   renderCart();
   updateCounters();
+  updateQuickWA();
 }
 
 function renderFeatured(){
@@ -285,7 +280,7 @@ function renderFeatured(){
   }
   empty.style.display = "none";
 
-  featured.slice(0, 12).forEach(p=>{
+  featured.slice(0, 9).forEach(p=>{
     grid.appendChild(productCard(p));
   });
 }
@@ -350,6 +345,10 @@ function groupBy(arr, keyFn){
     (acc[k] ||= []).push(item);
     return acc;
   }, {});
+}
+
+function placeholderImg(seed){
+  return `https://picsum.photos/seed/${encodeURIComponent(seed)}/900/700`;
 }
 
 function productCard(p){
@@ -448,10 +447,6 @@ function productCard(p){
   return card;
 }
 
-function placeholderImg(seed){
-  return `https://picsum.photos/seed/${encodeURIComponent(seed)}/900/900`;
-}
-
 function changeQty(id, delta){
   const next = Math.max(0, (cart[id] || 0) + delta);
   if(next === 0) delete cart[id];
@@ -459,14 +454,14 @@ function changeQty(id, delta){
 
   saveCart();
   updateCounters();
-  syncQtyBadges(id);
+  syncQtyBadge(id);
   renderCart();
   updateQuickWA();
   applyFilters();
   renderFeatured();
 }
 
-function syncQtyBadges(id){
+function syncQtyBadge(id){
   const el = document.getElementById(`qty_${safeId(id)}`);
   if(el) el.textContent = String(cart[id] || 0);
 }
@@ -480,6 +475,34 @@ function openCart(){
 function closeCart(){
   $("overlay").classList.remove("show");
   $("drawer").classList.remove("show");
+}
+
+function cartItemsDetailed(){
+  const items = [];
+  for(const [id, qty] of Object.entries(cart)){
+    const p = all.find(x=>x.id === id);
+    if(!p) continue;
+    items.push({p, qty});
+  }
+  return items;
+}
+
+function cartCount(){
+  return Object.values(cart).reduce((a,b)=>a+b,0);
+}
+
+function cartTotal(){
+  let t = 0;
+  for(const {p, qty} of cartItemsDetailed()){
+    if(p.precio !== null) t += p.precio * qty;
+  }
+  return t;
+}
+
+function updateCounters(){
+  $("cartCount").textContent = String(cartCount());
+  $("sumItems").textContent = String(cartCount());
+  $("sumTotal").textContent = money(cartTotal());
 }
 
 function renderCart(){
@@ -557,7 +580,6 @@ function renderCart(){
     rm.addEventListener("click", ()=>{
       delete cart[p.id];
       saveCart();
-      updateCounters();
       renderAll();
       updateQuickWA();
     });
@@ -575,34 +597,6 @@ function renderCart(){
     list.appendChild(row);
   });
 
-  $("sumItems").textContent = String(cartCount());
-  $("sumTotal").textContent = money(cartTotal());
-}
-
-function cartItemsDetailed(){
-  const items = [];
-  for(const [id, qty] of Object.entries(cart)){
-    const p = all.find(x=>x.id === id);
-    if(!p) continue;
-    items.push({p, qty});
-  }
-  return items;
-}
-
-function cartCount(){
-  return Object.values(cart).reduce((a,b)=>a+b,0);
-}
-
-function cartTotal(){
-  let t = 0;
-  for(const {p, qty} of cartItemsDetailed()){
-    if(p.precio !== null) t += p.precio * qty;
-  }
-  return t;
-}
-
-function updateCounters(){
-  $("cartCount").textContent = String(cartCount());
   $("sumItems").textContent = String(cartCount());
   $("sumTotal").textContent = money(cartTotal());
 }
@@ -677,7 +671,7 @@ function updateQuickWA(){
 
 function loadCart(){
   try{
-    const raw = localStorage.getItem("cart_v2");
+    const raw = localStorage.getItem("cart_boutique_v1");
     return raw ? JSON.parse(raw) : {};
   }catch{
     return {};
@@ -685,23 +679,23 @@ function loadCart(){
 }
 
 function saveCart(){
-  localStorage.setItem("cart_v2", JSON.stringify(cart));
+  localStorage.setItem("cart_boutique_v1", JSON.stringify(cart));
 }
 
 function demoData(){
   return [
-    {id:"LIB-CUA-001", nombre:"Cuaderno A5 Tapa Dura", categoria:"Librería", subcategoria:"Cuadernos", precio:5200, destacado:true, descripcion:"80 hojas, tapa dura. Ideal estudio/trabajo.", imagen:"https://picsum.photos/seed/cuaderno_a5/900/900"},
-    {id:"LIB-CUA-002", nombre:"Cuaderno A4 Rayado", categoria:"Librería", subcategoria:"Cuadernos", precio:6900, destacado:false, descripcion:"A4, rayado, encuadernado reforzado.", imagen:"https://picsum.photos/seed/cuaderno_a4/900/900"},
-    {id:"LIB-LAP-001", nombre:"Lápiz Negro HB (x12)", categoria:"Librería", subcategoria:"Lápices", precio:4100, destacado:true, descripcion:"Pack x12, trazo suave, buena mina.", imagen:"https://picsum.photos/seed/lapiz_hb/900/900"},
-    {id:"LIB-LAP-002", nombre:"Lapicera Gel Negra", categoria:"Librería", subcategoria:"Lápices", precio:900, destacado:false, descripcion:"Secado rápido, trazo parejo.", imagen:"https://picsum.photos/seed/lapicera_gel/900/900"},
-    {id:"LIB-ART-001", nombre:"Set Marcadores 12u", categoria:"Librería", subcategoria:"Arte", precio:8900, destacado:true, descripcion:"Colores vivos para lettering y dibujo.", imagen:"https://picsum.photos/seed/marcadores_12/900/900"},
-    {id:"LIB-ART-002", nombre:"Acuarelas 12 colores", categoria:"Librería", subcategoria:"Arte", precio:7600, destacado:false, descripcion:"Pastillas con pincel incluido.", imagen:"https://picsum.photos/seed/acuarelas/900/900"},
+    {id:"LIB-CUA-001", nombre:"Cuaderno A5 Tapa Dura", categoria:"Librería", subcategoria:"Cuadernos", precio:5200, destacado:true, descripcion:"80 hojas, tapa dura. Ideal estudio/trabajo.", imagen:"https://picsum.photos/seed/cuaderno_a5/900/700"},
+    {id:"LIB-CUA-002", nombre:"Cuaderno A4 Rayado", categoria:"Librería", subcategoria:"Cuadernos", precio:6900, destacado:false, descripcion:"A4, rayado, encuadernado reforzado.", imagen:"https://picsum.photos/seed/cuaderno_a4/900/700"},
+    {id:"LIB-LAP-001", nombre:"Lápiz Negro HB (x12)", categoria:"Librería", subcategoria:"Lápices", precio:4100, destacado:true, descripcion:"Pack x12, trazo suave, buena mina.", imagen:"https://picsum.photos/seed/lapiz_hb/900/700"},
+    {id:"LIB-LAP-002", nombre:"Lapicera Gel Negra", categoria:"Librería", subcategoria:"Lápices", precio:900, destacado:false, descripcion:"Secado rápido, trazo parejo.", imagen:"https://picsum.photos/seed/lapicera_gel/900/700"},
+    {id:"LIB-ART-001", nombre:"Set Marcadores 12u", categoria:"Librería", subcategoria:"Arte", precio:8900, destacado:true, descripcion:"Colores vivos para lettering y dibujo.", imagen:"https://picsum.photos/seed/marcadores_12/900/700"},
+    {id:"LIB-ART-002", nombre:"Acuarelas 12 colores", categoria:"Librería", subcategoria:"Arte", precio:7600, destacado:false, descripcion:"Pastillas con pincel incluido.", imagen:"https://picsum.photos/seed/acuarelas/900/700"},
 
-    {id:"JUG-MUN-001", nombre:"Muñeca Clásica 30cm", categoria:"Juguetería", subcategoria:"Muñecas/os", precio:18900, destacado:true, descripcion:"Muñeca 30cm, ropa intercambiable.", imagen:"https://picsum.photos/seed/muneca_30/900/900"},
-    {id:"JUG-MUN-002", nombre:"Muñeco Articulado", categoria:"Juguetería", subcategoria:"Muñecas/os", precio:15900, destacado:false, descripcion:"Articulaciones móviles, ideal colección.", imagen:"https://picsum.photos/seed/muneco_art/900/900"},
-    {id:"JUG-PEL-001", nombre:"Pelota Fútbol N°5", categoria:"Juguetería", subcategoria:"Pelotas", precio:12500, destacado:true, descripcion:"N°5, costura reforzada.", imagen:"https://picsum.photos/seed/pelota_futbol/900/900"},
-    {id:"JUG-PEL-002", nombre:"Pelota Playa Inflable", categoria:"Juguetería", subcategoria:"Pelotas", precio:6200, destacado:false, descripcion:"Liviana, ideal verano.", imagen:"https://picsum.photos/seed/pelota_playa/900/900"},
-    {id:"JUG-AUT-001", nombre:"Auto a Fricción", categoria:"Juguetería", subcategoria:"Autos", precio:7900, destacado:true, descripcion:"Tira y corre, resistente.", imagen:"https://picsum.photos/seed/auto_friccion/900/900"},
-    {id:"JUG-AUT-002", nombre:"Camioncito Constructor", categoria:"Juguetería", subcategoria:"Autos", precio:9900, destacado:false, descripcion:"Volqueta móvil, plástico duro.", imagen:"https://picsum.photos/seed/camioncito/900/900"}
+    {id:"JUG-MUN-001", nombre:"Muñeca Clásica 30cm", categoria:"Juguetería", subcategoria:"Muñecas/os", precio:18900, destacado:true, descripcion:"Muñeca 30cm, ropa intercambiable.", imagen:"https://picsum.photos/seed/muneca_30/900/700"},
+    {id:"JUG-MUN-002", nombre:"Muñeco Articulado", categoria:"Juguetería", subcategoria:"Muñecas/os", precio:15900, destacado:false, descripcion:"Articulaciones móviles, ideal colección.", imagen:"https://picsum.photos/seed/muneco_art/900/700"},
+    {id:"JUG-PEL-001", nombre:"Pelota Fútbol N°5", categoria:"Juguetería", subcategoria:"Pelotas", precio:12500, destacado:true, descripcion:"N°5, costura reforzada.", imagen:"https://picsum.photos/seed/pelota_futbol/900/700"},
+    {id:"JUG-PEL-002", nombre:"Pelota Playa Inflable", categoria:"Juguetería", subcategoria:"Pelotas", precio:6200, destacado:false, descripcion:"Liviana, ideal verano.", imagen:"https://picsum.photos/seed/pelota_playa/900/700"},
+    {id:"JUG-AUT-001", nombre:"Auto a Fricción", categoria:"Juguetería", subcategoria:"Autos", precio:7900, destacado:true, descripcion:"Tira y corre, resistente.", imagen:"https://picsum.photos/seed/auto_friccion/900/700"},
+    {id:"JUG-AUT-002", nombre:"Camioncito Constructor", categoria:"Juguetería", subcategoria:"Autos", precio:9900, destacado:false, descripcion:"Volqueta móvil, plástico duro.", imagen:"https://picsum.photos/seed/camioncito/900/700"}
   ];
 }
