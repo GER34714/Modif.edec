@@ -7,7 +7,7 @@
     "precio": 5200,
     "destacado": true,
     "descripcion": "80 hojas, tapa dura. Ideal estudio/trabajo.",
-    "imagen": "https://picsum.photos/seed/cuaderno_a5/900/900",
+    "imagen": "https://picsum.photos/seed/cuaderno_a5/900/700",
     "tags": ["a5", "tapa dura", "rayado"]
   },
   {
@@ -18,7 +18,7 @@
     "precio": 6900,
     "destacado": false,
     "descripcion": "A4, rayado, encuadernado reforzado.",
-    "imagen": "https://picsum.photos/seed/cuaderno_a4/900/900",
+    "imagen": "https://picsum.photos/seed/cuaderno_a4/900/700",
     "tags": ["a4", "rayado"]
   },
   {
@@ -29,7 +29,7 @@
     "precio": 4100,
     "destacado": true,
     "descripcion": "Pack x12, trazo suave, buena mina.",
-    "imagen": "https://picsum.photos/seed/lapiz_hb/900/900",
+    "imagen": "https://picsum.photos/seed/lapiz_hb/900/700",
     "tags": ["hb", "pack", "12"]
   },
   {
@@ -40,7 +40,7 @@
     "precio": 900,
     "destacado": false,
     "descripcion": "Secado rápido, trazo parejo.",
-    "imagen": "https://picsum.photos/seed/lapicera_gel/900/900",
+    "imagen": "https://picsum.photos/seed/lapicera_gel/900/700",
     "tags": ["gel", "negra"]
   },
   {
@@ -51,7 +51,7 @@
     "precio": 8900,
     "destacado": true,
     "descripcion": "Colores vivos para lettering y dibujo.",
-    "imagen": "https://picsum.photos/seed/marcadores_12/900/900",
+    "imagen": "https://picsum.photos/seed/marcadores_12/900/700",
     "tags": ["marcadores", "lettering"]
   },
   {
@@ -62,7 +62,7 @@
     "precio": 7600,
     "destacado": false,
     "descripcion": "Pastillas con pincel incluido.",
-    "imagen": "https://picsum.photos/seed/acuarelas/900/900",
+    "imagen": "https://picsum.photos/seed/acuarelas/900/700",
     "tags": ["acuarelas", "pintura"]
   },
   {
@@ -73,7 +73,7 @@
     "precio": 18900,
     "destacado": true,
     "descripcion": "Muñeca 30cm, ropa intercambiable.",
-    "imagen": "https://picsum.photos/seed/muneca_30/900/900",
+    "imagen": "https://picsum.photos/seed/muneca_30/900/700",
     "tags": ["muñeca", "30cm"]
   },
   {
@@ -84,7 +84,7 @@
     "precio": 15900,
     "destacado": false,
     "descripcion": "Articulaciones móviles, ideal colección.",
-    "imagen": "https://picsum.photos/seed/muneco_art/900/900",
+    "imagen": "https://picsum.photos/seed/muneco_art/900/700",
     "tags": ["articulado"]
   },
   {
@@ -95,7 +95,7 @@
     "precio": 12500,
     "destacado": true,
     "descripcion": "N°5, costura reforzada.",
-    "imagen": "https://picsum.photos/seed/pelota_futbol/900/900",
+    "imagen": "https://picsum.photos/seed/pelota_futbol/900/700",
     "tags": ["futbol", "n5"]
   },
   {
@@ -106,7 +106,7 @@
     "precio": 6200,
     "destacado": false,
     "descripcion": "Liviana, ideal verano.",
-    "imagen": "https://picsum.photos/seed/pelota_playa/900/900",
+    "imagen": "https://picsum.photos/seed/pelota_playa/900/700",
     "tags": ["playa", "inflable"]
   },
   {
@@ -117,7 +117,7 @@
     "precio": 7900,
     "destacado": true,
     "descripcion": "Tira y corre, resistente.",
-    "imagen": "https://picsum.photos/seed/auto_friccion/900/900",
+    "imagen": "https://picsum.photos/seed/auto_friccion/900/700",
     "tags": ["auto", "friccion"]
   },
   {
@@ -128,7 +128,7 @@
     "precio": 9900,
     "destacado": false,
     "descripcion": "Volqueta móvil, plástico duro.",
-    "imagen": "https://picsum.photos/seed/camioncito/900/900",
+    "imagen": "https://picsum.photos/seed/camioncito/900/700",
     "tags": ["camion", "volqueta"]
   }
 ]
