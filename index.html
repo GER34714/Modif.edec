@@ -3,78 +3,203 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#0b1020" />
+
   <title>Catálogo Online | Pedido por WhatsApp</title>
+  <meta name="description" content="Catálogo online con productos destacados, categorías y carrito sin backend. Armá tu pedido y enviá la lista por WhatsApp." />
+
+  <meta property="og:title" content="Catálogo Online | Pedido por WhatsApp" />
+  <meta property="og:description" content="Elegí productos, armá tu lista y pedí por WhatsApp. Simple, rápido y profesional." />
+  <meta property="og:image" content="https://iili.io/fjnJyAl.md.png" />
 
   <link rel="stylesheet" href="styles.css" />
-
-  <meta property="og:image" content="https://iili.io/fjnJyAl.md.png" />
 </head>
 
 <body>
+  <header class="topbar">
+    <div class="wrap topbar-inner">
+      <div class="brand">
+        <img class="brand-logo" src="https://iili.io/fjnJyAl.md.png" alt="Logo" />
+        <div class="brand-text">
+          <strong id="brandName">Tu Emprendimiento</strong>
+          <span>Catálogo + Pedido por WhatsApp</span>
+        </div>
+      </div>
 
-<header class="topbar">
-  <div class="wrap topbar-inner">
-    <div class="brand">
-      <strong id="brandName">Tu Emprendimiento</strong>
+      <div class="top-actions">
+        <button class="pill" id="btnOpenCart" type="button">
+          <span>Carrito</span>
+          <span class="count" id="cartCount">0</span>
+        </button>
+      </div>
     </div>
+  </header>
 
-    <div class="pill" id="btnOpenCart">
-      Carrito <span class="count" id="cartCount">0</span>
+  <main class="wrap">
+    <section class="hero">
+      <div class="hero-card">
+        <div class="hero-left">
+          <img class="logo-hero" src="https://iili.io/fjnJyAl.md.png" alt="Logo hero" />
+          <h1>Elegí productos, armá tu pedido y pedí por WhatsApp</h1>
+          <p>
+            Una web simple pero profesional: <b>destacados</b>, <b>categorías</b>, <b>buscador</b> y <b>carrito</b>
+            sin backend. El pedido llega con la lista armada.
+          </p>
+
+          <div class="hero-cta">
+            <a class="btn primary" href="#destacados">Ver destacados</a>
+            <a class="btn ghost" href="#catalogo">Ver todo</a>
+          </div>
+
+          <div class="hero-badges">
+            <span class="badge">100% mobile</span>
+            <span class="badge">Ordenado por categorías</span>
+            <span class="badge">Pedido por WhatsApp</span>
+            <span class="badge">Sin backend</span>
+          </div>
+        </div>
+
+        <div class="hero-right">
+          <h3>Datos opcionales para cerrar más rápido</h3>
+          <div class="lead-grid">
+            <label class="field">
+              <span>Nombre</span>
+              <input id="qName" placeholder="Ej: Flor" />
+            </label>
+            <label class="field">
+              <span>Zona</span>
+              <input id="qZone" placeholder="Ej: San Miguel" />
+            </label>
+            <label class="field">
+              <span>Entrega</span>
+              <select id="qDelivery">
+                <option value="">Seleccionar…</option>
+                <option value="Envío a domicilio">Envío a domicilio</option>
+                <option value="Retiro por el local">Retiro por el local</option>
+                <option value="Coordinar">Coordinar</option>
+              </select>
+            </label>
+            <label class="field">
+              <span>Pago</span>
+              <select id="qPay">
+                <option value="">Seleccionar…</option>
+                <option value="Efectivo">Efectivo</option>
+                <option value="Transferencia">Transferencia</option>
+                <option value="Mercado Pago">Mercado Pago</option>
+                <option value="Coordinar">Coordinar</option>
+              </select>
+            </label>
+          </div>
+
+          <button class="btn primary full" id="btnOpenCart2" type="button">Abrir carrito y enviar pedido</button>
+          <p class="muted">
+            Tip: pegá este link en tu bio. La gente entra, elige, y te escribe con el pedido listo.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="tools">
+      <div class="searchbar">
+        <span class="icon">⌕</span>
+        <input id="qSearch" placeholder="Buscar por nombre, código, categoría o subcategoría…" autocomplete="off" />
+        <button class="iconbtn" id="btnClear" type="button">✕</button>
+      </div>
+
+      <div class="tools-row">
+        <div class="chips" id="chipsCats"></div>
+        <div class="chips" id="chipsSubs"></div>
+      </div>
+
+      <div class="toolbar">
+        <div class="small muted" id="resultsInfo">Cargando catálogo…</div>
+        <div class="sort">
+          <label class="small muted" for="sortBy">Ordenar</label>
+          <select id="sortBy">
+            <option value="relevancia">Relevancia</option>
+            <option value="precio_asc">Precio: menor a mayor</option>
+            <option value="precio_desc">Precio: mayor a menor</option>
+            <option value="az">Nombre: A → Z</option>
+          </select>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="destacados">
+      <div class="section-head">
+        <h2>Productos destacados</h2>
+        <p class="muted">Lo más elegido / recomendado. Ideal para subir conversión.</p>
+      </div>
+      <div class="grid" id="gridFeatured"></div>
+      <div class="empty" id="emptyFeatured" style="display:none;">No hay destacados con los filtros actuales.</div>
+    </section>
+
+    <section class="section" id="catalogo">
+      <div class="section-head">
+        <h2>Catálogo completo</h2>
+        <p class="muted">Ordenado por categorías y subcategorías (librería, juguetería, etc.).</p>
+      </div>
+
+      <nav class="catnav" id="catNav"></nav>
+
+      <div class="catalog" id="catalogGroups"></div>
+      <div class="empty" id="emptyAll" style="display:none;">No se encontraron productos con esos filtros.</div>
+    </section>
+  </main>
+
+  <div class="sticky" id="stickyBar">
+    <div class="sticky-inner">
+      <button class="btn secondary" id="btnStickyCatalog" type="button">Volver al catálogo</button>
+      <button class="btn primary" id="btnStickyCart" type="button">Enviar pedido (WhatsApp)</button>
     </div>
   </div>
-</header>
 
-<main class="wrap">
-
-<section class="hero">
-  <img class="logo-hero" src="https://iili.io/fjnJyAl.md.png" alt="Logo">
-  <h1>Elegí productos y pedí por WhatsApp</h1>
-</section>
-
-<section class="section" id="catalogo">
-  <div class="controls">
-    <div class="search">
-      <input id="qSearch" placeholder="Buscar productos…" />
-      <div class="x" id="btnClear">✕</div>
-    </div>
-    <div class="filters" id="filters"></div>
-  </div>
-
-  <div id="grid" class="grid"></div>
-  <div id="empty" class="empty" style="display:none;">No hay productos</div>
-</section>
-
-</main>
-
-<div class="sticky">
-  <button id="btnStickyCatalog">Catálogo</button>
-  <button id="btnStickyCart">Enviar pedido</button>
-</div>
-
-<div class="overlay" id="overlay"></div>
-
-<aside class="drawer" id="drawer">
-  <div class="drawer-head">
-    <strong>Tu pedido</strong>
-    <button id="btnCloseCart">✕</button>
-  </div>
-
-  <div id="cartList"></div>
-
-  <div class="drawer-foot">
-    <div>Items: <b id="sumItems">0</b></div>
-    <div>Total: <b id="sumTotal">$0</b></div>
-    <button id="btnSendWA">Enviar por WhatsApp</button>
-    <button id="btnClearCart">Vaciar carrito</button>
-  </div>
-</aside>
-
-<footer>
-  <a href="https://ciborg347.onrender.com" target="_blank">
-    Creado y diseñado por Ciborg 347
+  <a class="wa-float" id="waQuick" href="#" aria-label="WhatsApp">
+    <span>WA</span>
   </a>
-</footer>
 
-<script src="script.js"></script>
+  <div class="overlay" id="overlay"></div>
+
+  <aside class="drawer" id="drawer" aria-label="Carrito">
+    <div class="drawer-head">
+      <strong>Tu pedido</strong>
+      <button class="close" id="btnCloseCart" type="button">✕</button>
+    </div>
+
+    <div class="drawer-body">
+      <div class="cartlist" id="cartList"></div>
+    </div>
+
+    <div class="drawer-foot">
+      <div class="sumrow">
+        <span>Items</span>
+        <b id="sumItems">0</b>
+      </div>
+      <div class="sumrow">
+        <span>Total estimado</span>
+        <b id="sumTotal">$0</b>
+      </div>
+
+      <button class="btn primary full" id="btnSendWA" type="button">Enviar pedido por WhatsApp</button>
+      <button class="btn ghost full" id="btnClearCart" type="button">Vaciar carrito</button>
+
+      <p class="muted small">
+        El total es estimado. Se confirma stock, variantes y envío por chat.
+      </p>
+    </div>
+  </aside>
+
+  <footer class="footer">
+    <div class="wrap footer-inner">
+      <div class="small muted">
+        <b id="footName">Tu Emprendimiento</b> · Catálogo online
+      </div>
+      <div class="small">
+        <a class="credit" href="https://ciborg347.onrender.com" target="_blank" rel="noopener">Creado y diseñado por Ciborg 347</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
 </body>
 </html>
